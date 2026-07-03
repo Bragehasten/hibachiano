@@ -1,0 +1,11 @@
+# Documentation — not needed for the deployed application
+README.md
+
+# Supabase SQL migrations — reference only, applied manually via the
+# Supabase SQL Editor or CLI, never read at runtime by the app
+supabase/
+
+# Editor / OS cruft
+.vscode/
+.idea/
+.DS_Store

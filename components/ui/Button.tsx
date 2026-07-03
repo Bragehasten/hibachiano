@@ -14,8 +14,10 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
+        // text-obsidian (not white) — white-on-flame only clears 3.44:1,
+        // failing WCAG AA (4.5:1); obsidian-on-flame clears 5.68:1.
         primary:
-          "bg-hibachi-flame px-8 py-3 text-white hover:shadow-[0_0_25px_5px_rgba(255,69,0,0.45)]",
+          "bg-hibachi-flame px-8 py-3 text-obsidian hover:shadow-[0_0_25px_5px_rgba(255,69,0,0.45)]",
         outline:
           "border border-white/70 bg-transparent px-8 py-3 text-white hover:bg-white/10",
         ghost: "bg-transparent px-4 py-2 text-white hover:text-hibachi-flame",

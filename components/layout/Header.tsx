@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
@@ -14,9 +14,14 @@ const NAV_LINKS = [
   { label: "Contact", href: "/contact" },
 ];
 
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), input, textarea, [tabindex]:not([tabindex="-1"])';
+
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const toggleButtonRef = useRef<HTMLButtonElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 50);
@@ -28,15 +33,44 @@ export function Header() {
   useEffect(() => {
     if (!isMenuOpen) return;
 
+    const toggleButton = toggleButtonRef.current;
     document.body.style.overflow = "hidden";
+
+    // Move focus into the dialog and trap Tab within it while open —
+    // otherwise a keyboard user could Tab into page content that's
+    // visually hidden behind this full-screen overlay.
+    const focusables = overlayRef.current?.querySelectorAll<HTMLElement>(
+      FOCUSABLE_SELECTOR,
+    );
+    focusables?.[0]?.focus();
+
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsMenuOpen(false);
+      if (event.key === "Escape") {
+        setIsMenuOpen(false);
+        return;
+      }
+
+      if (event.key !== "Tab" || !focusables || focusables.length === 0) {
+        return;
+      }
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
     window.addEventListener("keydown", onKeyDown);
 
     return () => {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKeyDown);
+      toggleButton?.focus();
     };
   }, [isMenuOpen]);
 
@@ -76,6 +110,7 @@ export function Header() {
         </div>
 
         <button
+          ref={toggleButtonRef}
           type="button"
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           aria-expanded={isMenuOpen}
@@ -103,6 +138,10 @@ export function Header() {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
+            ref={overlayRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation menu"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

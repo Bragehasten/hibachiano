@@ -7,6 +7,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Container } from "@/components/ui/Container";
 import { FadeInStagger } from "@/components/ui/FadeInStagger";
 import { DOORDASH_URL } from "@/lib/constants";
+import { shimmerBlurDataURL } from "@/lib/image-placeholder";
 
 interface PopularItem {
   name: string;
@@ -81,6 +82,8 @@ function ItemCard({ name, price, description, image }: PopularItem) {
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover"
+              placeholder="blur"
+              blurDataURL={shimmerBlurDataURL()}
               onError={() => setImageErrored(true)}
             />
           </motion.div>

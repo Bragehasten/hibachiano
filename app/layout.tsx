@@ -4,6 +4,7 @@ import { PageTransition } from "@/components/layout/PageTransition";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { LocalBusinessSchema } from "@/components/seo/LocalBusinessSchema";
+import { ThirdPartyScripts } from "@/components/analytics/ThirdPartyScripts";
 import { SITE_URL } from "@/lib/constants";
 import "@/styles/globals.css";
 
@@ -73,6 +74,7 @@ export default function RootLayout({
     >
       <body className="bg-obsidian font-sans text-white antialiased">
         <LocalBusinessSchema />
+        <ThirdPartyScripts />
         <Header />
         <PageTransition>{children}</PageTransition>
         <Footer />

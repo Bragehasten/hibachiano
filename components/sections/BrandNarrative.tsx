@@ -1,4 +1,5 @@
 import { ParallaxImage } from "@/components/ui/ParallaxImage";
+import { shimmerBlurDataURL } from "@/lib/image-placeholder";
 
 export function BrandNarrative() {
   return (
@@ -10,6 +11,8 @@ export function BrandNarrative() {
               src: "/images/brand/chef-teppanyaki.jpg",
               alt: "A Hibachiano chef performing tableside at the teppanyaki grill",
               sizes: "(max-width: 1024px) 100vw, 50vw",
+              placeholder: "blur",
+              blurDataURL: shimmerBlurDataURL(),
             }}
             containerClassName="absolute inset-0"
           />

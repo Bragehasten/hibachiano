@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ParallaxImage } from "@/components/ui/ParallaxImage";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { INSTAGRAM_URL, TIKTOK_URL } from "@/lib/constants";
+import { shimmerBlurDataURL } from "@/lib/image-placeholder";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -20,6 +21,8 @@ export default function ContactPage() {
                 src: "/images/contact/atmosphere.jpg",
                 alt: "",
                 sizes: "(max-width: 1024px) 100vw, 50vw",
+                placeholder: "blur",
+                blurDataURL: shimmerBlurDataURL(),
               }}
               containerClassName="absolute inset-0"
               offset={40}
