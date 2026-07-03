@@ -3,9 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Button } from "@/components/ui/Button";
+import { OrderActionDropdown } from "@/components/ui/OrderActionDropdown";
 import { Container } from "@/components/ui/Container";
-import { DOORDASH_URL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -36,13 +35,11 @@ export function Header() {
     const toggleButton = toggleButtonRef.current;
     document.body.style.overflow = "hidden";
 
-    // Move focus into the dialog and trap Tab within it while open —
-    // otherwise a keyboard user could Tab into page content that's
-    // visually hidden behind this full-screen overlay.
-    const focusables = overlayRef.current?.querySelectorAll<HTMLElement>(
+    // Move focus into the dialog on open.
+    const initialFocusables = overlayRef.current?.querySelectorAll<HTMLElement>(
       FOCUSABLE_SELECTOR,
     );
-    focusables?.[0]?.focus();
+    initialFocusables?.[0]?.focus();
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -50,9 +47,16 @@ export function Header() {
         return;
       }
 
-      if (event.key !== "Tab" || !focusables || focusables.length === 0) {
-        return;
-      }
+      if (event.key !== "Tab") return;
+
+      // Re-query on every Tab press (rather than once at open) — the
+      // overlay now nests OrderActionDropdown, whose own menu items
+      // mount/unmount dynamically, so a cached list would go stale the
+      // moment that inner dropdown opens.
+      const focusables = overlayRef.current?.querySelectorAll<HTMLElement>(
+        FOCUSABLE_SELECTOR,
+      );
+      if (!focusables || focusables.length === 0) return;
 
       const first = focusables[0];
       const last = focusables[focusables.length - 1];
@@ -104,9 +108,7 @@ export function Header() {
         </nav>
 
         <div className="hidden md:block">
-          <Button href={DOORDASH_URL} target="_blank" variant="primary">
-            Order Delivery
-          </Button>
+          <OrderActionDropdown variant="primary" />
         </div>
 
         <button
@@ -169,14 +171,7 @@ export function Header() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 + NAV_LINKS.length * 0.08, duration: 0.5 }}
             >
-              <Button
-                href={DOORDASH_URL}
-                target="_blank"
-                variant="primary"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Order Delivery
-              </Button>
+              <OrderActionDropdown variant="primary" />
             </motion.div>
           </motion.div>
         )}

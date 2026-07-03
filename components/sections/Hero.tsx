@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
+import { OrderActionDropdown } from "@/components/ui/OrderActionDropdown";
 import { FadeInStagger } from "@/components/ui/FadeInStagger";
-import { DOORDASH_URL } from "@/lib/constants";
 
 export interface HeroProps {
   videoSrc?: string;
@@ -63,9 +63,7 @@ export function Hero({
           <Button href="/menu" variant="outline">
             View Menu
           </Button>
-          <Button href={DOORDASH_URL} target="_blank" variant="primary">
-            Order Now
-          </Button>
+          <OrderActionDropdown variant="primary" />
         </div>
       </FadeInStagger>
 

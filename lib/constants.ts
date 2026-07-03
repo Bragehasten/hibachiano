@@ -6,6 +6,10 @@ export const SITE_URL =
 export const DOORDASH_URL =
   "https://www.doordash.com/store/hibachiano-miami-33713879/61203564/";
 
+// Placeholder phone number — replace with the real line once available.
+export const PHONE_NUMBER = "+13050000000";
+export const PHONE_NUMBER_DISPLAY = "(305) 000-0000";
+
 export const INSTAGRAM_URL = "https://www.instagram.com/hibachiano/";
 export const YELP_URL = "https://m.yelp.com/biz/hibachiano-miami-2";
 export const FACEBOOK_URL =
