@@ -2,8 +2,11 @@
 README.md
 
 # Supabase SQL migrations — reference only, applied manually via the
-# Supabase SQL Editor or CLI, never read at runtime by the app
-supabase/
+# Supabase SQL Editor or CLI, never read at runtime by the app.
+# Leading slash anchors this to the repo root only — without it, this
+# pattern also matched (and broke) the unrelated lib/supabase/ directory
+# containing the actual Supabase client code needed at runtime.
+/supabase/
 
 # Editor / OS cruft
 .vscode/
