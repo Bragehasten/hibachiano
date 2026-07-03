@@ -11,30 +11,48 @@ export interface HeroProps {
   posterSrc?: string;
 }
 
+const VIDEO_FADE_EASE = [0.22, 1, 0.36, 1] as const;
+
 export function Hero({
   videoSrc = "/videos/hibachi-hero.mp4",
-  posterSrc = "/images/hero-poster.jpg",
+  posterSrc = "/images/hero-poster.webp",
 }: HeroProps) {
   const [videoErrored, setVideoErrored] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-charcoal">
       {videoSrc && !videoErrored && (
-        <video
-          className="absolute inset-0 h-full w-full object-cover"
-          src={videoSrc}
-          poster={posterSrc}
-          autoPlay
-          muted
-          loop
-          playsInline
-          onError={() => setVideoErrored(true)}
-        />
+        <motion.div
+          initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2, ease: VIDEO_FADE_EASE }}
+          className="absolute inset-0"
+        >
+          <video
+            className="h-full w-full object-cover object-center"
+            src={videoSrc}
+            poster={posterSrc}
+            autoPlay
+            muted
+            loop
+            playsInline
+            onError={() => setVideoErrored(true)}
+          />
+        </motion.div>
       )}
 
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-obsidian" />
+      {/* Layer 1: radial vignette — draws the eye toward the centered flame */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(11,12,16,0.55)_100%)]" />
 
-      <FadeInStagger className="relative z-10 flex flex-col items-center gap-8 px-6 text-center">
+      {/* Layer 2: vertical gradient — guarantees the typography stays legible
+          and hands off seamlessly into the next section */}
+      <div className="absolute inset-0 bg-gradient-to-b from-obsidian/30 via-obsidian/50 to-obsidian" />
+
+      <FadeInStagger
+        delayChildren={0.3}
+        className="relative z-10 flex flex-col items-center gap-8 px-6 text-center"
+      >
         <h1 className="max-w-4xl font-serif text-5xl leading-tight text-white sm:text-6xl md:text-7xl">
           The Art of Fire &amp; Flavor
         </h1>

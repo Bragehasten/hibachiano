@@ -17,12 +17,16 @@ export interface FadeInStaggerProps {
   children: ReactNode;
   className?: string;
   staggerDelay?: number;
+  /** Delay before the first child starts revealing — e.g. to let a
+   * background element (a video fade-in, for instance) begin first. */
+  delayChildren?: number;
 }
 
 export function FadeInStagger({
   children,
   className,
   staggerDelay = 0.15,
+  delayChildren = 0,
 }: FadeInStaggerProps) {
   const shouldReduceMotion = useReducedMotion();
 
@@ -38,7 +42,9 @@ export function FadeInStagger({
       viewport={{ once: true, margin: "-100px" }}
       variants={{
         hidden: {},
-        visible: { transition: { staggerChildren: staggerDelay } },
+        visible: {
+          transition: { staggerChildren: staggerDelay, delayChildren },
+        },
       }}
     >
       {Children.map(children, (child) =>
